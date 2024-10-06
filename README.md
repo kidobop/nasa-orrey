@@ -1,8 +1,21 @@
-# React + Vite
+# NASA Orrery
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a 3D visualization of the solar system using NASA's public API and Three.js.
 
-Currently, two official plugins are available:
+**Features:**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+* Interactive camera controls
+* Informative labels and details for each celestial body
+
+**Technologies:**
+
+* React
+* Vite
+* Three.js
+
+
+**Future Enhancements:**
+
+* Moons and other celestial bodies
+* Improved visuals and textures
+* More interactive features (e.g., time controls)

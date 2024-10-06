@@ -59,26 +59,21 @@ const celestialData = {
     gravity: "9.0 m/s²",
     avgTemp: "-138°C",
   },
-  "Near-Earth Asteroids": {
-    description: "Near-Earth Asteroids (NEAs) are asteroids that pass close to Earth's orbit. They are of interest for scientific study, potential resource mining, and impact risk assessment.",
-    population: "Over 28,000 known (as of 2023)",
-    size: "Range from a few meters to several kilometers",
-    composition: "Mostly rock and metal",
-    orbitRange: "Typically between 0.983 and 1.3 AU from the Sun",
+  Uranus: {
+    description: "Uranus is the seventh planet from the Sun and the third-largest in the Solar System. It is the only planet whose name is derived from a figure from Greek mythology.",
+    diameter: "50,724 km",
+    orbitalPeriod: "84 Earth years",
+    dayLength: "17.2 hours",
+    gravity: "8.7 m/s²",
+    avgTemp: "-195°C",
   },
-  "Near-Earth Comets": {
-    description: "Near-Earth Comets are comets that pass close to Earth's orbit. They are of interest for their potential impact risk and as remnants from the early solar system.",
-    population: "Over 100 known",
-    size: "Typically a few kilometers in diameter",
-    composition: "Ice, dust, and rocky material",
-    orbitRange: "Varies widely, but perihelion distance less than 1.3 AU",
-  },
-  "Potentially Hazardous Asteroids": {
-    description: "Potentially Hazardous Asteroids (PHAs) are asteroids that come within 0.05 AU of Earth's orbit and are large enough to cause significant regional damage if they were to impact Earth.",
-    population: "Over 2,000 known",
-    size: "Larger than 140 meters in diameter",
-    composition: "Mostly rock and metal",
-    orbitRange: "Come within 0.05 AU (about 7.5 million km) of Earth's orbit",
+  Neptune: {
+    description: "Neptune is the eighth and farthest-known Solar planet from the Sun. It is the fourth-largest planet by diameter and the third-most-massive planet.",
+    diameter: "49,244 km",
+    orbitalPeriod: "165 Earth years",
+    dayLength: "16.1 hours",
+    gravity: "11.0 m/s²",
+    avgTemp: "-201°C",
   },
 };
 
@@ -113,7 +108,9 @@ const Orrery = () => {
       { name: 'Earth', size: 1, orbit: 20, texturePath: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-qqRh1kAmA-5aYXVlAazxLDshVMo8tk2vWQ&s' },
       { name: 'Mars', size: 0.7, orbit: 25, texturePath: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/9b7029c3-9717-4658-9066-11c30aa24029/dcsauye-ba810e63-20e3-4ae9-a73c-9201ed87e67d.png/v1/fill/w_1280,h_640,q_80,strp/mars_texture_map__rare_version__by_oleg_pluton_dcsauye-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NjQwIiwicGF0aCI6IlwvZlwvOWI3MDI5YzMtOTcxNy00NjU4LTkwNjYtMTFjMzBhYTI0MDI5XC9kY3NhdXllLWJhODEwZTYzLTIwZTMtNGFlOS1hNzNjLTkyMDFlZDg3ZTY3ZC5wbmciLCJ3aWR0aCI6Ijw9MTI4MCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.bVzQQe3M_FRJKATXUZN-hTsjTNL7-eucoxqWhgYKkvA' },
       { name: 'Jupiter', size: 2, orbit: 35, texturePath: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_ABVh6X-rxANutcMkEqX0Q6fQtFt7ERZPkQ&s' },
-      { name: 'Saturn', size: 1.8, orbit: 45, texturePath: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFEBAq2y8p5pY3Q3JR4DE-fAiyFrXeGTj6VA&s' },
+      { name: 'Saturn', size: 1.8, orbit: 45, texturePath: 'data:image/jpeg;base64,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' },
+      { name: 'Uranus', size: 1.4, orbit: 55, texturePath: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAJ8AqQMBIgACEQEDEQH/xAAaAAADAQEBAQAAAAAAAAAAAAAAAQQDAgUG/8QAKxABAAIDAQAABQEIAwAAAAAAABESAQITAwQUITFBQiIyUoGRocHhBVFh/8QAGQEBAQADAQAAAAAAAAAAAAAAAAECAwQG/8QAGxEBAQEBAAMBAAAAAAAAAAAAABESASFBURP/2gAMAwEAAhEDEQA/APg4KHUiXonO5EOpEoOYEOpdYzj9U/yUZwIbW8/4dv6lnbzJz6MoEO51dYzrj6kGUCGttRbUnBlAhpbUs7ak4OIEOpEoOYEOrCQKBU5EgUCBIk8BBrQ6LlKxDahczJWQa8yoZKyDWhUIVwGnM+ZOlYhrQUMlZBpQ+aQrINaChkrINaChkrIQ2oVFyVjAhtQUTK1dxHFacOnPHPpDyHFbAgyaRcR8uugQZ4aQ/Lj5ddAgzw0i4DgtODPDSHgXBdBQZ4aRcD4LYEGeGkXA+CyDM8NIvly+XXYwecLnhpB8vqfDVZAgzw0i+XHy66BBnhosHGrKDhWFdZy5sIKEKdhYoEC11YWKBUSnY8bOanjUKcix1KoUWKx1KoUWFigVCurHZxU8ahXVisKioUWFiqKhW1Do3oKFaNJ6CirGjrGmqmkfM+avbz1j6fcqBpLQ+arHm7x5pTSPHjt/C6x47Lsfs/pE2KmkPIs+a+upZ89Sm0GdCot38mVCrpPQUUUFCmk9BRRQUKaYUFFFCoVNJ6CiigoVdO4EFcXIwhgri4R1h3rqyxu103CNNfN1QY3xX6fdhv67apEjbOrjOrHfPpt4be3ntbOv72n5hLv8d7RFs4j8YysWLp+p2eT836T+828viPTYhHoZy4zhlj2x+fv+XePTVIQxAtqM7EBBw5uOhCOoEObi5COg5uLkIi6n1RdBcrfhZ1HVH0HQphb2d6e7z+h9SmHq6/E1/wC/6utvjMZx+39cf+/V5PUdSp+b3/hPjvgPHfXb0+H3vj9Wm+cf5hn8d7/8b7759NN/fG2fvjPlrj+8vDz6ObJ7q4WZz5TmhY9Ndf8AWUuNhK0wsz765xGdZz+M/cY9UdjuUws6n2RXLoUwt6joj6DoUws6H1RdB0KYW9R1RdB0KYSdT6I7HjZq06sq+hdEthY0mVXQdEljsaXKvoOiSxyaTKroePRJJ2XRlX0Pokk8bbGjKm7nPonzlzJoyq6F0S52K6aXKvofRHc8bGkyr6jqlkSaMquo6pZEmjLOA0gVYxsZhpBQQZm7qKpFcB3U6kRmbuoqsHEnLuBBBxJS7gVIOChpUVIM4N3UQQcB3U4IMw0gQQKTljIlKraRLKRK0ayJZSJKNZEspElGsiWUiSjWRLKRYo1kSykSUayJZSLFGsiWUiSjWRZlJSUbSJZSJKP/2Q==' },
+      { name: 'Neptune', size: 1.3, orbit: 65, texturePath: 'data:image/jpeg;base64,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' },
     ];
 
     const planetMeshes = planets.map(planet => {
@@ -144,35 +141,7 @@ const Orrery = () => {
       return orbitMesh;
     });
 
-    // Add Near-Earth Objects
-    const nearEarthObjects = [
-      { name: 'Near-Earth Asteroids', color: 0xffff00, count: 100 },
-      { name: 'Near-Earth Comets', color: 0x00ffff, count: 20 },
-      { name: 'Potentially Hazardous Asteroids', color: 0xff0000, count: 50 }
-    ];
-
-    nearEarthObjects.forEach(object => {
-      const geometry = new THREE.BufferGeometry();
-      const positions = new Float32Array(object.count * 3);
-      
-      for (let i = 0; i < object.count; i++) {
-        const theta = Math.random() * Math.PI * 2;
-        const phi = Math.acos(Math.random() * 2 - 1);
-        const radius = Math.random() * 10 + 20; // Distribute between Earth and Mars orbits
-        
-        positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
-        positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
-        positions[i * 3 + 2] = radius * Math.cos(phi);
-      }
-
-      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-      const material = new THREE.PointsMaterial({ color: object.color, size: 0.1 });
-      const points = new THREE.Points(geometry, material);
-      points.userData.name = object.name;
-      scene.add(points);
-    });
-
-    const ambientLight = new THREE.AmbientLight(0x404040,20);
+    const ambientLight = new THREE.AmbientLight(0x404040,25);
     scene.add(ambientLight);
 
     const sunLight = new THREE.PointLight(0xffffff, 1, 100);
@@ -201,7 +170,7 @@ const Orrery = () => {
       mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
       raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(scene.children);
+      const intersects = raycaster.intersectObjects([sun, ...planetMeshes]);
 
       if (intersects.length > 0) {
         setHoveredObject(intersects[0].object.userData.name);
@@ -215,7 +184,7 @@ const Orrery = () => {
       mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
       raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(scene.children);
+      const intersects = raycaster.intersectObjects([sun, ...planetMeshes]);
 
       if (intersects.length > 0) {
         setSelectedObject(intersects[0].object.userData.name);
@@ -294,9 +263,22 @@ const Orrery = () => {
           <h2>{selectedObject}</h2>
           <p>{celestialData[selectedObject].description}</p>
           <ul>
-            {Object.entries(celestialData[selectedObject]).map(([key, value]) => (
-              key !== 'description' && <li key={key}>{key}: {value}</li>
-            ))}
+            <li>Diameter: {celestialData[selectedObject].diameter}</li>
+            {selectedObject === 'Sun' ? (
+              <>
+                <li>Rotation Period: {celestialData[selectedObject].rotationPeriod}</li>
+                <li>Surface Temperature: {celestialData[selectedObject].surfaceTemp}</li>
+                <li>Core Temperature: {celestialData[selectedObject].coreTemp}</li>
+                <li>Age: {celestialData[selectedObject].age}</li>
+              </>
+            ) : (
+              <>
+                <li>Orbital Period: {celestialData[selectedObject].orbitalPeriod}</li>
+                <li>Day Length: {celestialData[selectedObject].dayLength}</li>
+                <li>Gravity: {celestialData[selectedObject].gravity}</li>
+                <li>Average Temperature: {celestialData[selectedObject].avgTemp}</li>
+              </>
+            )}
           </ul>
         </div>
       )}
