@@ -59,6 +59,27 @@ const celestialData = {
     gravity: "9.0 m/s²",
     avgTemp: "-138°C",
   },
+  "Near-Earth Asteroids": {
+    description: "Near-Earth Asteroids (NEAs) are asteroids that pass close to Earth's orbit. They are of interest for scientific study, potential resource mining, and impact risk assessment.",
+    population: "Over 28,000 known (as of 2023)",
+    size: "Range from a few meters to several kilometers",
+    composition: "Mostly rock and metal",
+    orbitRange: "Typically between 0.983 and 1.3 AU from the Sun",
+  },
+  "Near-Earth Comets": {
+    description: "Near-Earth Comets are comets that pass close to Earth's orbit. They are of interest for their potential impact risk and as remnants from the early solar system.",
+    population: "Over 100 known",
+    size: "Typically a few kilometers in diameter",
+    composition: "Ice, dust, and rocky material",
+    orbitRange: "Varies widely, but perihelion distance less than 1.3 AU",
+  },
+  "Potentially Hazardous Asteroids": {
+    description: "Potentially Hazardous Asteroids (PHAs) are asteroids that come within 0.05 AU of Earth's orbit and are large enough to cause significant regional damage if they were to impact Earth.",
+    population: "Over 2,000 known",
+    size: "Larger than 140 meters in diameter",
+    composition: "Mostly rock and metal",
+    orbitRange: "Come within 0.05 AU (about 7.5 million km) of Earth's orbit",
+  },
 };
 
 const Orrery = () => {
@@ -123,6 +144,34 @@ const Orrery = () => {
       return orbitMesh;
     });
 
+    // Add Near-Earth Objects
+    const nearEarthObjects = [
+      { name: 'Near-Earth Asteroids', color: 0xffff00, count: 100 },
+      { name: 'Near-Earth Comets', color: 0x00ffff, count: 20 },
+      { name: 'Potentially Hazardous Asteroids', color: 0xff0000, count: 50 }
+    ];
+
+    nearEarthObjects.forEach(object => {
+      const geometry = new THREE.BufferGeometry();
+      const positions = new Float32Array(object.count * 3);
+      
+      for (let i = 0; i < object.count; i++) {
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(Math.random() * 2 - 1);
+        const radius = Math.random() * 10 + 20; // Distribute between Earth and Mars orbits
+        
+        positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+        positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+        positions[i * 3 + 2] = radius * Math.cos(phi);
+      }
+
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      const material = new THREE.PointsMaterial({ color: object.color, size: 0.1 });
+      const points = new THREE.Points(geometry, material);
+      points.userData.name = object.name;
+      scene.add(points);
+    });
+
     const ambientLight = new THREE.AmbientLight(0x404040,20);
     scene.add(ambientLight);
 
@@ -152,7 +201,7 @@ const Orrery = () => {
       mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
       raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects([sun, ...planetMeshes]);
+      const intersects = raycaster.intersectObjects(scene.children);
 
       if (intersects.length > 0) {
         setHoveredObject(intersects[0].object.userData.name);
@@ -166,7 +215,7 @@ const Orrery = () => {
       mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
 
       raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects([sun, ...planetMeshes]);
+      const intersects = raycaster.intersectObjects(scene.children);
 
       if (intersects.length > 0) {
         setSelectedObject(intersects[0].object.userData.name);
@@ -245,22 +294,9 @@ const Orrery = () => {
           <h2>{selectedObject}</h2>
           <p>{celestialData[selectedObject].description}</p>
           <ul>
-            <li>Diameter: {celestialData[selectedObject].diameter}</li>
-            {selectedObject === 'Sun' ? (
-              <>
-                <li>Rotation Period: {celestialData[selectedObject].rotationPeriod}</li>
-                <li>Surface Temperature: {celestialData[selectedObject].surfaceTemp}</li>
-                <li>Core Temperature: {celestialData[selectedObject].coreTemp}</li>
-                <li>Age: {celestialData[selectedObject].age}</li>
-              </>
-            ) : (
-              <>
-                <li>Orbital Period: {celestialData[selectedObject].orbitalPeriod}</li>
-                <li>Day Length: {celestialData[selectedObject].dayLength}</li>
-                <li>Gravity: {celestialData[selectedObject].gravity}</li>
-                <li>Average Temperature: {celestialData[selectedObject].avgTemp}</li>
-              </>
-            )}
+            {Object.entries(celestialData[selectedObject]).map(([key, value]) => (
+              key !== 'description' && <li key={key}>{key}: {value}</li>
+            ))}
           </ul>
         </div>
       )}
